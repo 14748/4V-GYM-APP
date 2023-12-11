@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400&family=Lato:wght@300;400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+.text-custom {
+    color: #D15B5B;
+}
+
+.bg-custom {
+    background-color: #D15B5B;
+}
+
+.border-top-custom {
+    border-top: 5px solid #D15B5B;
+}
+
+.text-custom-grey {
+    color: #6B6B6B;
+}
+
+.bg-custom-shade-grey{
+    background-color: #F5F5F5;
+}
+
+.bg-custom-strong-grey{
+    background-color: #D9D9D9;
+}
+
