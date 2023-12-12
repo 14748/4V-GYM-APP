@@ -14,4 +14,8 @@ import { ActivitiesComponent } from './activities/activities.component';
 })
 export class AppComponent {
   title = 'web';
+  onActivities: boolean = false;
+  toggleView(value: boolean) {
+    this.onActivities = value;
+  }
 }

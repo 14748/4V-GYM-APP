@@ -1,14 +1,33 @@
 <footer class="bg-white flex inset-x-0 bottom-0 justify-center align-middle px-4 pb-4">
-    <div class="w-1/2 text-center text-custom-grey">
-        <div class="flex justify-center items-center pt-2">
-            <img src="../../assets/img/datetime-inactive.svg" class="max-w-full h-auto max-h-14" alt="Flowbite Logo">
-            <h2 class="text-lg md:text-2xl font-bold text-dark md:px-12">ACTIVIDADES</h2>
-        </div>        
-    </div>
+    @if (onActivities) {
+        <div class="w-1/2 text-center text-custom border-top-custom">
+            <div (click)="toggleView.emit(false)" class="flex justify-center items-center pt-2">
+                <img src="../../assets/img/datetime-active.svg" class="max-w-full h-auto max-h-14" alt="Flowbite Logo">
+                <h2 class="text-lg md:text-2xl font-bold text-dark md:px-12">ACTIVIDADES</h2>
+            </div>   
+        </div>
+    }@else {
+        <div class="w-1/2 text-center text-custom-grey">
+            <div (click)="toggleView.emit(true)" class="flex justify-center items-center pt-2">
+                <img src="../../assets/img/datetime-inactive.svg" class="max-w-full h-auto max-h-14" alt="Flowbite Logo">
+                <h2 class="text-lg md:text-2xl font-bold text-dark md:px-12">ACTIVIDADES</h2>
+            </div>        
+        </div>
+    }
+   @if (!onActivities) {
     <div class="w-1/2 text-center text-custom border-top-custom">
-        <div class="flex justify-center items-center pt-2">
+        <div (click)="toggleView.emit(true)" class="flex justify-center items-center pt-2">
             <img src="../../assets/img/user-active.svg" class="max-w-full h-auto max-h-14" alt="Flowbite Logo">
             <h2 class="text-lg md:text-2xl font-bold text-dark md:px-12">MONITORES</h2>
         </div>   
     </div>
+   }@else {
+    <div class="w-1/2 text-center text-custom-grey">
+        <div (click)="toggleView.emit(false)" class="flex justify-center items-center pt-2">
+            <img src="../../assets/img/user-inactive.svg" class="max-w-full h-auto max-h-14" alt="Flowbite Logo">
+            <h2 class="text-lg md:text-2xl font-bold text-dark md:px-12">MONITORES</h2>
+        </div>        
+    </div>
+   }
+
 </footer>
