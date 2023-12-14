@@ -1,0 +1,37 @@
+<div class="relative p-6">
+  <div class="absolute inset-y-0 flex items-center ps-3.5 pointer-events-none">
+    <img src="../../assets/img/magnifier.svg" class="w-4 h-4" alt="Flowbite Logo">
+  </div>
+  <input type="text" id="input-group-1" class="focus:outline-none focus:ring-1 focus:ring-custom-ring bg-custom-strong-grey text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:placeholder-gray-400 dark:text-white" placeholder="">
+</div>
+
+<div class="flex justify-center items-center gap-5 flex-wrap">
+  <img (click)="shiftTeacherUpwards()" 
+     src="../../assets/img/arrow-up.svg" 
+     class="md:hidden h-12 mr-2" 
+     alt="Right Arrow for small screens">
+  <img (click)="shiftTeacherUpwards()" 
+      src="../../assets/img/left.svg" 
+      class="hidden md:block h-12 mr-2" 
+      alt="Right Arrow for larger screens">
+  @for (item of filteredTeachers; track $index) {
+    <div class="w-full md:w-1/4 overflow-hidden bg-custom-strong-grey border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 overflow-y-auto">
+      <div class="flex justify-center items-center mb-4">
+          <img src="../../assets/img/edit.svg" class="h-6 w-auto"  alt="Edit Icon">
+          <img src="../../assets/img/user-active.svg" class="h-14 w-auto px-5" alt="User Icon">
+          <img src="../../assets/img/delete.svg" class="h-6 w-auto"  alt="Delete Icon">
+      </div>
+      <p class="text-center text-gray-700 dark:text-gray-400">{{item.name}}</p>
+      <p class="text-center text-gray-700 dark:text-gray-400">{{item.email}}</p>
+      <p class="text-center text-gray-700 dark:text-gray-400">{{item.phoneNumber}}</p>
+    </div>
+  }
+  <img (click)="shiftTeacherUpwards()" 
+     src="../../assets/img/arrow-down.svg" 
+     class="md:hidden h-12 mr-2" 
+     alt="Right Arrow for small screens">
+  <img (click)="shiftTeacherUpwards()" 
+      src="../../assets/img/right.svg" 
+      class="hidden md:block h-12 mr-2" 
+      alt="Right Arrow for larger screens">
+</div>

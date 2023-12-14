@@ -1,7 +1,8 @@
 <app-navigation></app-navigation>
+
 @if (onActivities) {
     <app-activities></app-activities>
 }@else {
-    
+    <app-teachers></app-teachers>
 }
 <app-footer (toggleView)="toggleView($event)" [onActivities]="onActivities"></app-footer>
