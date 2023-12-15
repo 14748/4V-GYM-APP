@@ -5,6 +5,15 @@
   <input type="text" id="input-group-1" class="focus:outline-none focus:ring-1 focus:ring-custom-ring bg-custom-strong-grey text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:placeholder-gray-400 dark:text-white" placeholder="">
 </div>
 
+<img (click)="changeTeacherStatus()" 
+     src="../../assets/img/add.svg" 
+     class="h-12 mr-2" 
+     alt="Right Arrow for small screens">
+
+@if (addTeacher) {
+  <app-add-teacher (toggleView)="changeTeacherStatus()"></app-add-teacher>
+}
+
 <div class="flex justify-center items-center gap-5 flex-wrap">
   <img (click)="shiftTeacherUpwards()" 
      src="../../assets/img/arrow-up.svg" 

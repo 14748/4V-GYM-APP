@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AddTeacherComponent } from '../add-teacher/add-teacher.component';
 
 export interface Teacher{
   name: string,
@@ -9,11 +10,18 @@ export interface Teacher{
 @Component({
   selector: 'app-teachers',
   standalone: true,
-  imports: [],
+  imports: [AddTeacherComponent],
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.css'
 })
 export class TeachersComponent {
+
+  addTeacher: boolean = false;
+
+  changeTeacherStatus(): void{
+    this.addTeacher = !this.addTeacher;
+  }
+
   teachers: Teacher[] = [
     {
       name: "John Doe",
