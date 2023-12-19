@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { AddActivityComponent } from '../add-activity/add-activity.component';
 
 
 export enum Type {
@@ -18,7 +17,7 @@ export interface Activity{
 @Component({
   selector: 'app-activities-display',
   standalone: true,
-  imports: [AddActivityComponent],
+  imports: [],
   templateUrl: './activities-display.component.html',
   styleUrl: './activities-display.component.css'
 })
@@ -27,12 +26,6 @@ export interface Activity{
 
 export class ActivitiesDisplayComponent {
   
-  addActivity: boolean = false;
-
-  changeActivityStatus(): void{
-    this.addActivity = !this.addActivity;
-  }
-
  activities: Activity[] = [
   { date: new Date('2023-12-05T17:30:00'), monitor1: 'Monitor6', type: Type.Pillates, monitor2: '' },
   { date: new Date('2023-12-05T13:30:00'), monitor1: 'Monitor3', type: Type.Spinning, monitor2: '' },
