@@ -38,9 +38,13 @@
             <div class="p-4 mr-2 bg-green-800 w-full h-28 relative">
                 <h2 class="text-white text-xl font-bold absolute inset-0 flex justify-center items-center">FREE</h2>
                 <div class="absolute right-5 top-5">
-                    <img src="../../assets/img/add.svg" class="h-6" alt="Flowbite Logo">
+                    <img (click)="changeActivityStatus()" src="../../assets/img/add.svg" class="h-6" alt="Flowbite Logo">
                 </div>
             </div>
         }
     </div>
+}
+
+@if (addActivity) {
+    <app-add-activity (toggleView)="changeActivityStatus()"></app-add-activity>
 }
