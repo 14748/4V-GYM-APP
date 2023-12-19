@@ -21,7 +21,7 @@ class ActivityType
     #[ORM\Column]
     private ?int $numbermonitors = null;
 
-    #[ORM\OneToMany(mappedBy: 'activity_type', targetEntity: Activity::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'activityType', targetEntity: Activity::class)]
     private Collection $activities;
 
     public function __construct()

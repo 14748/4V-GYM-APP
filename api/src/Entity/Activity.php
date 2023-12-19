@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ActivityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ActivityRepository::class)]
@@ -15,69 +13,21 @@ class Activity
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'activities')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?ActivityType $activity_type = null;
-
-    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Monitor::class)]
-    private Collection $monitors;
-
     #[ORM\Column(length: 255)]
     private ?string $datestart = null;
 
     #[ORM\Column(length: 255)]
     private ?string $dateend = null;
 
-    public function __construct()
-    {
-        $this->monitors = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?ActivityType $activityType = null;
+
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Monitor $monitor = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getActivityType(): ?ActivityType
-    {
-        return $this->activity_type;
-    }
-
-    public function setActivityType(?ActivityType $activity_type): static
-    {
-        $this->activity_type = $activity_type;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Monitor>
-     */
-    public function getMonitors(): Collection
-    {
-        return $this->monitors;
-    }
-
-    public function addMonitor(Monitor $monitor): static
-    {
-        if (!$this->monitors->contains($monitor)) {
-            $this->monitors->add($monitor);
-            $monitor->setActivity($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMonitor(Monitor $monitor): static
-    {
-        if ($this->monitors->removeElement($monitor)) {
-            // set the owning side to null (unless already changed)
-            if ($monitor->getActivity() === $this) {
-                $monitor->setActivity(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getDatestart(): ?string
@@ -100,6 +50,30 @@ class Activity
     public function setDateend(string $dateend): static
     {
         $this->dateend = $dateend;
+
+        return $this;
+    }
+
+    public function getActivityType(): ?ActivityType
+    {
+        return $this->activityType;
+    }
+
+    public function setActivityType(?ActivityType $activityType): static
+    {
+        $this->activityType = $activityType;
+
+        return $this;
+    }
+
+    public function getMonitor(): ?Monitor
+    {
+        return $this->monitor;
+    }
+
+    public function setMonitor(?Monitor $monitor): static
+    {
+        $this->monitor = $monitor;
 
         return $this;
     }
