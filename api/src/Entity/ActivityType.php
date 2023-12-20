@@ -22,11 +22,11 @@ class ActivityType
     private ?int $numbermonitors = null;
 
     #[ORM\OneToMany(mappedBy: 'activityType', targetEntity: Activity::class)]
-    private Collection $activities;
+    private Collection $activity;
 
     public function __construct()
     {
-        $this->activities = new ArrayCollection();
+        $this->activity = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,15 +61,15 @@ class ActivityType
     /**
      * @return Collection<int, Activity>
      */
-    public function getActivities(): Collection
+    public function getActivity(): Collection
     {
-        return $this->activities;
+        return $this->activity;
     }
 
     public function addActivity(Activity $activity): static
     {
-        if (!$this->activities->contains($activity)) {
-            $this->activities->add($activity);
+        if (!$this->activity->contains($activity)) {
+            $this->activity->add($activity);
             $activity->setActivityType($this);
         }
 
@@ -78,7 +78,7 @@ class ActivityType
 
     public function removeActivity(Activity $activity): static
     {
-        if ($this->activities->removeElement($activity)) {
+        if ($this->activity->removeElement($activity)) {
             // set the owning side to null (unless already changed)
             if ($activity->getActivityType() === $this) {
                 $activity->setActivityType(null);

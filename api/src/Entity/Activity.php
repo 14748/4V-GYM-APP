@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActivityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ActivityRepository::class)]
@@ -19,11 +21,16 @@ class Activity
     #[ORM\Column(length: 255)]
     private ?string $dateend = null;
 
-    #[ORM\ManyToOne(inversedBy: 'activities')]
+    #[ORM\ManyToOne(inversedBy: 'activity')]
     private ?ActivityType $activityType = null;
 
-    #[ORM\ManyToOne(inversedBy: 'activities')]
-    private ?Monitor $monitor = null;
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Monitor::class)]
+    private Collection $monitor;
+
+    public function __construct()
+    {
+        $this->monitor = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -66,14 +73,32 @@ class Activity
         return $this;
     }
 
-    public function getMonitor(): ?Monitor
+    /**
+     * @return Collection<int, Monitor>
+     */
+    public function getMonitor(): Collection
     {
         return $this->monitor;
     }
 
-    public function setMonitor(?Monitor $monitor): static
+    public function addMonitor(Monitor $monitor): static
     {
-        $this->monitor = $monitor;
+        if (!$this->monitor->contains($monitor)) {
+            $this->monitor->add($monitor);
+            $monitor->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMonitor(Monitor $monitor): static
+    {
+        if ($this->monitor->removeElement($monitor)) {
+            // set the owning side to null (unless already changed)
+            if ($monitor->getActivity() === $this) {
+                $monitor->setActivity(null);
+            }
+        }
 
         return $this;
     }

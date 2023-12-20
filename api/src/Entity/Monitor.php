@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\MonitorRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MonitorRepository::class)]
@@ -27,13 +25,8 @@ class Monitor
     #[ORM\Column(length: 255)]
     private ?string $photo = null;
 
-    #[ORM\OneToMany(mappedBy: 'monitor', targetEntity: Activity::class)]
-    private Collection $activities;
-
-    public function __construct()
-    {
-        $this->activities = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'monitor')]
+    private ?Activity $activity = null;
 
     public function getId(): ?int
     {
@@ -88,32 +81,14 @@ class Monitor
         return $this;
     }
 
-    /**
-     * @return Collection<int, Activity>
-     */
-    public function getActivities(): Collection
+    public function getActivity(): ?Activity
     {
-        return $this->activities;
+        return $this->activity;
     }
 
-    public function addActivity(Activity $activity): static
+    public function setActivity(?Activity $activity): static
     {
-        if (!$this->activities->contains($activity)) {
-            $this->activities->add($activity);
-            $activity->setMonitor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeActivity(Activity $activity): static
-    {
-        if ($this->activities->removeElement($activity)) {
-            // set the owning side to null (unless already changed)
-            if ($activity->getMonitor() === $this) {
-                $activity->setMonitor(null);
-            }
-        }
+        $this->activity = $activity;
 
         return $this;
     }
