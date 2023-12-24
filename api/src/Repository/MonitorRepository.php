@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Monitor;
+use App\Entity\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @extends ServiceEntityRepository<Monitor>
@@ -16,33 +18,62 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MonitorRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Monitor::class);
+        $this->entityManager = $entityManager;
     }
 
-//    /**
-//     * @return Monitor[] Returns an array of Monitor objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * Remove a given activity from all monitors that have it.
+     */
+    public function removeActivityFromMonitors($activityId)
+    {
+        $activity = $this->entityManager->getRepository(Activity::class)->find($activityId);
 
-//    public function findOneBySomeField($value): ?Monitor
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if (!$activity) {
+            throw new \Exception("Activity not found");
+        }
+
+        $monitors = $this->createQueryBuilder('monitor')
+                    ->innerJoin('monitor.activities', 'activity')
+                    ->andWhere('activity.id = :activityId')
+                    ->setParameter('activityId', $activityId)
+                    ->getQuery()
+                    ->getResult();
+
+        foreach ($monitors as $monitor) {
+            $monitor->removeActivity($activity);
+            $this->entityManager->persist($monitor);
+        }
+
+        $this->entityManager->remove($activity);
+        $this->entityManager->flush();
+    }
+
+    public function disassociateMonitorsFromActivity($activityId)
+    {
+        $activity = $this->entityManager->getRepository(Activity::class)->find($activityId);
+
+        if (!$activity) {
+            throw new \Exception("Activity not found");
+        }
+
+        $monitors = $this->createQueryBuilder('monitor')
+                    ->innerJoin('monitor.activities', 'activity')
+                    ->andWhere('activity.id = :activityId')
+                    ->setParameter('activityId', $activityId)
+                    ->getQuery()
+                    ->getResult();
+
+        foreach ($monitors as $monitor) {
+            $monitor->removeActivity($activity);  // Remove the activity from the monitor
+            $this->entityManager->persist($monitor);
+        }
+
+        $this->entityManager->flush();  // Apply the changes to the database
+    }
 }
+
