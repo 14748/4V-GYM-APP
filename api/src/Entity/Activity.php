@@ -24,7 +24,7 @@ class Activity
     #[ORM\ManyToOne(inversedBy: 'activity')]
     private ?ActivityType $activityType = null;
 
-    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Monitor::class)]
+    #[ORM\ManyToMany(targetEntity: Monitor::class, inversedBy: 'activities')]
     private Collection $monitor;
 
     public function __construct()
@@ -85,7 +85,6 @@ class Activity
     {
         if (!$this->monitor->contains($monitor)) {
             $this->monitor->add($monitor);
-            $monitor->setActivity($this);
         }
 
         return $this;
@@ -93,12 +92,7 @@ class Activity
 
     public function removeMonitor(Monitor $monitor): static
     {
-        if ($this->monitor->removeElement($monitor)) {
-            // set the owning side to null (unless already changed)
-            if ($monitor->getActivity() === $this) {
-                $monitor->setActivity(null);
-            }
-        }
+        $this->monitor->removeElement($monitor);
 
         return $this;
     }

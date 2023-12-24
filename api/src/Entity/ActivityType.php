@@ -18,8 +18,8 @@ class ActivityType
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column]
-    private ?int $numbermonitors = null;
+    #[ORM\Column(length: 255)]
+    private ?string $numbermonitors = null;
 
     #[ORM\OneToMany(mappedBy: 'activityType', targetEntity: Activity::class)]
     private Collection $activity;
@@ -46,12 +46,12 @@ class ActivityType
         return $this;
     }
 
-    public function getNumbermonitors(): ?int
+    public function getNumbermonitors(): ?string
     {
         return $this->numbermonitors;
     }
 
-    public function setNumbermonitors(int $numbermonitors): static
+    public function setNumbermonitors(string $numbermonitors): static
     {
         $this->numbermonitors = $numbermonitors;
 
