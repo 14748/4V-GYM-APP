@@ -6,13 +6,16 @@
         alt="User Active">
     </div>
     <div class="mb-4">
-      <input class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Nombre">
+      <input [(ngModel)]="Teacher.name" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Nombre">
     </div>
     <div class="mb-4">
-      <input class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email">
+      <input  [(ngModel)]="Teacher.email" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email">
     </div>
     <div class="mb-4">
-      <input class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" placeholder="Teléfono">
+      <input [(ngModel)]="Teacher.phone" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" placeholder="Teléfono">
+    </div>
+    <div class="mb-4">
+      <input [(ngModel)]="Teacher.photo" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="photo" type="text" placeholder="Foto">
     </div>
     <div class="flex items-center justify-between">
       <button (click)="cancel()" class="bg-custom-ring text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">

@@ -100,4 +100,15 @@ export class ApiRequestsService {
       })
     );
   }
+
+  createTeacher(teacherData: Omit<Teacher, 'id'>): Observable<any> {
+    const url = 'http://127.0.0.1:8000/monitors'; // Your API endpoint
+    return this.http.post(url, teacherData).pipe(
+      catchError(error => {
+        console.error('Error posting teacher', error);
+        return throwError(() => new Error('Error posting teacher'));
+      })
+    );
+  }
+  
 }
