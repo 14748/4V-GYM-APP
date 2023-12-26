@@ -1,46 +1,39 @@
-@for (act of getActivitiesForSelectedDate(); track $index) {
-    <div class="bg-custom-shade-grey px-4 flex flex-col sm:flex-row">
-        <div class="flex justify-center items-center p-2 sm:flex-col sm:items-start sm:justify-start mr-2">
-            <p class="sm:mb-2">{{act.date.getHours()}}:{{act.date.getMinutes()}}</p>
-            <p class="sm:mt-2">{{act.date.getHours() + 1}}:{{act.date.getMinutes() + 30}}</p>
-        </div>
-        @if (act.monitor1 != "") {
-            <div class="p-4 mr-2 bg-custom-strong-grey w-full h-28">
-                <div class="flex justify-center items-center">
-                    <div class="flex flex-col items-center justify-center">
-                        <img src="../../assets/img/user-active.svg" class="w-auto max-w-full h-14 px-5" alt="Flowbite Logo">
-                        <p class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">{{act.monitor1}}</p>
-                    </div>
-            
-                    <div class="flex flex-col items-center justify-center">
-                        @if (act.monitor2 != "") {
-                            <img src="../../assets/img/user-active.svg" class="w-auto max-w-full h-14 px-5" alt="Flowbite Logo">
-                            <p class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">{{act.monitor2}}</p>
-                        }@else {
-                            <img src="../../assets/img/blank-svgrepo-com.svg" class="w-auto max-w-full h-14 px-5" alt="Flowbite Logo">
+@for (act of getActivitiesForToday1(); track $index) {
+        <div class="bg-custom-shade-grey px-4 flex flex-col sm:flex-row">
+            <div class="flex justify-center items-center p-2 sm:flex-col sm:items-start sm:justify-start mr-2">
+                <p class="sm:mb-2">{{act.date_start | formatTime}}</p>
+                <p class="sm:mt-2">{{act.date_end | formatTime}}</p>
+            </div>
+            @if (act.id > 0) {
+                <div class="p-4 mr-2 bg-custom-strong-grey w-full h-28">
+                    <div class="flex justify-center items-center">
+                        @for (monior of act.monitors; track $index) {
+                            <div class="flex flex-col items-center justify-center">
+                                <img src="../../assets/img/user-active.svg" class="w-auto max-w-full h-14 px-5" alt="Flowbite Logo">
+                                <p class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">{{monior.name}}</p>
+                            </div>
                         }
-                    </div>
-            
-
-                    <div class="flex flex-col items-center justify-center">
-                        <img [src]="getImagePath(act.type)" class="w-auto max-w-full h-14 px-5" alt="Flowbite Logo">
-                        <p class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">{{act.type}}</p>
-                    </div>
-                    
-            
-                    <div class="flex flex-col gap-6 pl-5">
-                        <img src="../../assets/img/delete.svg" class="w-auto max-w-full h-6" alt="Flowbite Logo">
-                        <img src="../../assets/img/edit.svg" class="w-auto max-w-full h-6" alt="Flowbite Logo">
+                
+    
+                        <div class="flex flex-col items-center justify-center">
+                            <img [src]="getImagePath(act.activity_type)" class="w-auto max-w-full h-14 px-5" alt="Flowbite Logo">
+                        </div>
+                        
+                
+                        <div class="flex flex-col gap-6 pl-5">
+                            <img src="../../assets/img/delete.svg" class="w-auto max-w-full h-6" alt="Flowbite Logo">
+                            <img src="../../assets/img/edit.svg" class="w-auto max-w-full h-6" alt="Flowbite Logo">
+                        </div>
                     </div>
                 </div>
-            </div>
-        }@else {
-            <div class="p-4 mr-2 bg-green-800 w-full h-28 relative">
-                <h2 class="text-white text-xl font-bold absolute inset-0 flex justify-center items-center">FREE</h2>
-                <div class="absolute right-5 top-5">
-                    <img src="../../assets/img/add.svg" class="h-6" alt="Flowbite Logo">
+            }@else {
+                <div class="p-4 mr-2 bg-green-800 w-full h-28 relative">
+                    <h2 class="text-white text-xl font-bold absolute inset-0 flex justify-center items-center">FREE</h2>
+                    <div class="absolute right-5 top-5">
+                        <img src="../../assets/img/add.svg" class="h-6" alt="Flowbite Logo">
+                    </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div> 
+    
 }

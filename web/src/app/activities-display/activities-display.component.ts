@@ -1,23 +1,29 @@
 import { Component, Input } from '@angular/core';
+import { ApiRequestsService } from '../api-requests.service';
+import { FormatTimePipe } from '../format-time.pipe';
 
-
-export enum Type {
-  Pillates = "Pillates",
-  BodyPump = "BodyPump",
-  Spinning = "Spinning"
+export interface Monitor {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  photo: string;
 }
 
-export interface Activity{
-  date: Date,
-  monitor1: string,
-  monitor2: string,
-  type: Type
+export interface Activit1 {
+  id: number;
+  activity_type: number;
+  monitors: Monitor[];
+  date_start: string;
+  date_end: string;
 }
+
+
 
 @Component({
   selector: 'app-activities-display',
   standalone: true,
-  imports: [],
+  imports: [FormatTimePipe],
   templateUrl: './activities-display.component.html',
   styleUrl: './activities-display.component.css'
 })
@@ -25,64 +31,65 @@ export interface Activity{
 
 
 export class ActivitiesDisplayComponent {
-  
- activities: Activity[] = [
-  { date: new Date('2023-12-05T17:30:00'), monitor1: 'Monitor6', type: Type.Pillates, monitor2: '' },
-  { date: new Date('2023-12-05T13:30:00'), monitor1: 'Monitor3', type: Type.Spinning, monitor2: '' },
-  { date: new Date('2023-12-06T13:30:00'), monitor1: 'Monitor1', type: Type.BodyPump, monitor2: 'Monitor16' },
-  { date: new Date('2023-12-07T13:30:00'), monitor1: 'Monitor9', type: Type.Pillates, monitor2: 'Monitor12' },
-  { date: new Date('2023-12-08T10:00:00'), monitor1: 'Monitor8', type: Type.Spinning, monitor2: '' },
-  { date: new Date('2023-12-09T13:30:00'), monitor1: 'Monitor9', type: Type.Spinning, monitor2: '' },
-  { date: new Date('2023-12-09T17:30:00'), monitor1: 'Monitor1', type: Type.Spinning, monitor2: 'Monitor14' },
-  { date: new Date('2023-12-10T10:00:00'), monitor1: 'Monitor7', type: Type.Pillates, monitor2: 'Monitor12' }
-];
-
-  Type = Type;
-
   setStartHour(time: number): void{
     this.currentTime = time.toString();
   }
 
-  getActivitiesForSelectedDate(): Activity[] {
+
+  getActivitiesForToday1(): Activit1[] {
     const requiredTimes = [10, 13, 17];
-
-    let dayActivities = this.activities
-        .filter(act => 
-            act.date.getDate() === this.selectedDate.getDate() &&
-            act.date.getFullYear() === this.selectedDate.getFullYear())
-        .sort((a, b) => a.date.getHours() - b.date.getHours());
-
+    const today = this.selectedDate;
+  
+    let dayActivities = this.items
+        .filter(act => {
+            const actDate = new Date(act.date_start);
+            return actDate.getDate() === today.getDate() &&
+                actDate.getMonth() === today.getMonth() &&
+                actDate.getFullYear() === today.getFullYear() &&
+                requiredTimes.includes(actDate.getHours());
+        });
+  
     requiredTimes.forEach(hour => {
         let minutes = 0;
-        if (hour === 13) {
-            minutes = 30;
-        } else if (hour === 17) {
+        if (hour === 13 || hour === 17) {
             minutes = 30;
         }
-
-        if (!dayActivities.some(act => act.date.getHours() === hour && act.date.getMinutes() === minutes)) {
-            const placeholderActivity: Activity = {
-                date: new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), hour, minutes),
-                monitor1: '',
-                monitor2: '',
-                type: Type.Pillates
+  
+        if (!dayActivities.some(act => {
+            const actDate = new Date(act.date_start);
+            return actDate.getHours() === hour && actDate.getMinutes() === minutes;
+        })) {
+            const placeholderActivity: Activit1 = {
+                id: -1, // Placeholder ID
+                activity_type: -1, // Placeholder Activity Type
+                monitors: [], // Placeholder Monitors
+                date_start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour, minutes).toISOString(),
+                date_end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour + 1, minutes + 30).toISOString(),
             };
             dayActivities.push(placeholderActivity);
         }
     });
+  
+    dayActivities.sort((a, b) => {
+        const dateA = new Date(a.date_start).getTime();
+        const dateB = new Date(b.date_start).getTime();
+        return dateA - dateB;
+    });
+  
+    return dayActivities;
+  }
+  
 
-    return dayActivities.sort((a, b) => a.date.getHours() - b.date.getHours() || a.date.getMinutes() - b.date.getMinutes());
-}
 
 
 
-  getImagePath(type: Type): string {
+  getImagePath(type: Number): string {
     switch(type) {
-      case Type.Pillates:
+      case 0:
         return "../../assets/img/pillates.svg";
-      case Type.Spinning:
+      case 1:
         return "../../assets/img/spinning.svg";
-      case Type.BodyPump:
+      case 2:
         return "../../assets/img/bodypump.svg";
       default:
         return "../../assets/img/default.svg";
@@ -90,4 +97,23 @@ export class ActivitiesDisplayComponent {
 }
   currentTime: string = "";
   @Input() selectedDate: Date = new Date();
+
+  public items: Activit1[] = [];
+
+  constructor(private pepitoService: ApiRequestsService) {}
+
+  ngOnInit(): void {
+    this.getItems();
+    this.pepitoService.obs.subscribe(() => this.getItems());
+  }
+
+  getItems(): void {
+    this.pepitoService.getActivitiesByApi()
+    .subscribe((items) => 
+    {
+      this.items = items;
+    });
+    console.log(this.items);
+  }
+
 }
