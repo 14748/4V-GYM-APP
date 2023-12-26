@@ -80,4 +80,14 @@ export class ApiRequestsService {
   notify = (data: any) => {
     this.subject.next(data)
   }
+
+  deleteActivity(id: number): Observable<any> {
+    const url = `http://127.0.0.1:8000/activities/${id}`;  // Construct the URL with the activity ID
+    return this.http.delete(url).pipe(
+      catchError(error => {
+        console.error('Error deleting activity', error);
+        return throwError(() => new Error('Error deleting activity'));
+      })
+    );
+  }
 }

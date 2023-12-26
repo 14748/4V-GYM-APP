@@ -129,4 +129,15 @@ export class ActivitiesDisplayComponent {
     console.log(this.items);
   }
 
+  deleteItem(id: number): void {
+    this.pepitoService.deleteActivity(id).subscribe({
+      next: (response) => {
+        console.log('Activity deleted successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error deleting activity:', error);
+      }
+    });
+  }
+
 }
