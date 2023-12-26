@@ -37,9 +37,15 @@ export class ActivitiesDisplayComponent {
   }
 
   addActivity: boolean = false;
-
+  startDate: string = "";
+  endDate: string = "";
   changeActivityStatus(): void{
     this.addActivity = !this.addActivity;
+  }
+
+  setDates(act: Activit1 ): void{
+    this.startDate = act.date_start;
+    this.endDate = act.date_end;
   }
 
 

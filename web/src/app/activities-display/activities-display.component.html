@@ -1,5 +1,5 @@
 @if (addActivity) {
-    <app-add-activity (toggleView)="changeActivityStatus()"></app-add-activity>
+    <app-add-activity [startDate]="startDate" [endDate]="endDate" (toggleView)="changeActivityStatus()"></app-add-activity>
   }
 
 @for (act of getActivitiesForToday1(); track $index) {
@@ -34,7 +34,7 @@
                 <div class="p-4 mr-2 bg-green-800 w-full h-28 relative">
                     <h2 class="text-white text-xl font-bold absolute inset-0 flex justify-center items-center">FREE</h2>
                     <div class="absolute right-5 top-5">
-                        <img (click)="changeActivityStatus()" src="../../assets/img/add.svg" class="h-6" alt="Flowbite Logo">
+                        <img (click)="changeActivityStatus()" (click)="setDates(act)" src="../../assets/img/add.svg" class="h-6" alt="Flowbite Logo">
                     </div>
                 </div>
             }

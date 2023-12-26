@@ -38,6 +38,7 @@ export class ApiRequestsService {
       })
     );
   }
+  
 
   getActivityTypesByApi(): Observable<ActivityType[]> {
     return this.http.get<any[]>('http://127.0.0.1:8000/activity-types').pipe(
@@ -66,6 +67,10 @@ export class ApiRequestsService {
         return throwError(() => new Error('Error fetching activities'));
       })
     );
+  }
+
+  createActivity(activityData: Omit<Activit1, 'id'>): Observable<any> {
+    return this.http.post('http://127.0.0.1:8000/activities', activityData);
   }
   
 
