@@ -20,6 +20,13 @@ export class TeachersComponent {
   teachers: Teacher[] = [];
 
   constructor(private apiRequestsService: ApiRequestsService) {}
+
+  removeMonitor(monitorId: number) {
+    this.apiRequestsService.deleteMonitor(monitorId).subscribe({
+      next: () => console.log(`Monitor with ID ${monitorId} deleted successfully`),
+      error: (error) => console.error('There was an error deleting the monitor', error)
+    });
+  }
   filteredTeachers: Teacher[] = [];
   ngOnInit() {
     this.apiRequestsService.getMonitors().subscribe({

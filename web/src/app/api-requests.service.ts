@@ -120,5 +120,15 @@ export class ApiRequestsService {
       })
     );
   }
+
+  deleteMonitor(id: number): Observable<any> {
+    const url = `http://127.0.0.1:8000/monitors/${id}`; // Construct the URL with the monitor ID
+    return this.http.delete(url).pipe(
+      catchError(error => {
+        console.error('Error deleting monitor', error);
+        return throwError(() => new Error('Error deleting monitor'));
+      })
+    );
+  }
   
 }

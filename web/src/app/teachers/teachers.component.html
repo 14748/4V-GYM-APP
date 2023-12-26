@@ -28,7 +28,7 @@
       <div class="flex justify-center items-center mb-4">
           <img src="../../assets/img/edit.svg" class="h-6 w-auto"  alt="Edit Icon">
           <img src="../../assets/img/user-active.svg" class="h-14 w-auto px-5" alt="User Icon">
-          <img src="../../assets/img/delete.svg" class="h-6 w-auto"  alt="Delete Icon">
+          <img (click)="removeMonitor(item.id)" src="../../assets/img/delete.svg" class="h-6 w-auto"  alt="Delete Icon">
       </div>
       <p class="text-center text-gray-700 dark:text-gray-400">{{item.name}}</p>
       <p class="text-center text-gray-700 dark:text-gray-400">{{item.email}}</p>
