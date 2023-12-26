@@ -110,5 +110,15 @@ export class ApiRequestsService {
       })
     );
   }
+
+  getMonitors(): Observable<Teacher[]> {
+    const url = 'http://127.0.0.1:8000/monitors'; // Your API endpoint
+    return this.http.get<Teacher[]>(url).pipe(
+      catchError(error => {
+        console.error('Error fetching monitors', error);
+        return throwError(() => new Error('Error fetching monitors'));
+      })
+    );
+  }
   
 }

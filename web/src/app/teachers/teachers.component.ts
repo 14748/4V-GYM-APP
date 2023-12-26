@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { AddTeacherComponent } from '../add-teacher/add-teacher.component';
-
-export interface Teacher{
-  name: string,
-  email: string,
-  phoneNumber: string
-}
+import { ApiRequestsService, Teacher } from '../api-requests.service';
 
 @Component({
   selector: 'app-teachers',
@@ -22,30 +17,20 @@ export class TeachersComponent {
     this.addTeacher = !this.addTeacher;
   }
 
-  teachers: Teacher[] = [
-    {
-      name: "John Doe",
-      email: "johndoe@example.com",
-      phoneNumber: "123-456-7890"
-    },
-    {
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      phoneNumber: "234-567-8901"
-    },
-    {
-      name: "Alice Johnson",
-      email: "alicejohnson@example.com",
-      phoneNumber: "345-678-9012"
-    },
-    {
-      name: "Ricardo aaa",
-      email: "alicejohnson@example.com",
-      phoneNumber: "345-678-9012"
-    },
-  ];
+  teachers: Teacher[] = [];
 
-  filteredTeachers: Teacher[] = this.teachers.slice(0, 3);
+  constructor(private apiRequestsService: ApiRequestsService) {}
+  filteredTeachers: Teacher[] = [];
+  ngOnInit() {
+    this.apiRequestsService.getMonitors().subscribe({
+      next: (data) => {
+        this.teachers = data;
+        this.filteredTeachers = this.teachers.slice(0, 3);
+      },
+      error: (error) => console.error('There was an error fetching the monitors', error)
+    });
+  }
+  
 
   shiftTeacherUpwards(): void{
     let nextTeacherIndex: number = this.teachers.indexOf(this.filteredTeachers[this.filteredTeachers.length - 1]) + 1;

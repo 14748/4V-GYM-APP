@@ -133,7 +133,7 @@ class ActivitiesController extends AbstractController
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
 
-            if (empty($data['datestart']) || empty($data['dateend']) || empty($data['activityType'])) {
+            if (empty($data['date_start']) || empty($data['date_end']) || empty($data['activity_type'])) {
                 return new JsonResponse([
                     'cod' => JsonResponse::HTTP_BAD_REQUEST,
                     'message' => 'Fields: datestart, dateend, activityType are required'
@@ -149,7 +149,7 @@ class ActivitiesController extends AbstractController
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
 
-            $activityType = $manager->getRepository(ActivityType::class)->find($data['activityType']);
+            $activityType = $manager->getRepository(ActivityType::class)->find($data['activity_type']);
             if (!$activityType) {
                 return new JsonResponse([
                     'cod' => JsonResponse::HTTP_BAD_REQUEST,
@@ -157,8 +157,8 @@ class ActivitiesController extends AbstractController
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
 
-            $activity->setDatestart($data['datestart']);
-            $activity->setDateend($data['dateend']);
+            $activity->setDatestart($data['date_start']);
+            $activity->setDateend($data['date_end']);
             $activity->setActivityType($activityType); 
 
             $monitorRepository = $manager->getRepository(Monitor::class);
