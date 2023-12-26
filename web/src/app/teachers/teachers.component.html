@@ -11,7 +11,7 @@
      alt="Right Arrow for small screens">
 
 @if (addTeacher) {
-  <app-add-teacher (toggleView)="changeTeacherStatus()"></app-add-teacher>
+  <app-add-teacher [editTeacher]="editTEacher" (toggleView)="changeTeacherStatus()"></app-add-teacher>
 }
 
 <div class="flex justify-center items-center gap-5 flex-wrap">
@@ -26,7 +26,7 @@
   @for (item of filteredTeachers; track $index) {
     <div class="w-full md:w-1/4 overflow-hidden bg-custom-strong-grey border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 overflow-y-auto">
       <div class="flex justify-center items-center mb-4">
-          <img src="../../assets/img/edit.svg" class="h-6 w-auto"  alt="Edit Icon">
+          <img (click)="setEditTeacher(item)" src="../../assets/img/edit.svg" class="h-6 w-auto"  alt="Edit Icon">
           <img src="../../assets/img/user-active.svg" class="h-14 w-auto px-5" alt="User Icon">
           <img (click)="removeMonitor(item.id)" src="../../assets/img/delete.svg" class="h-6 w-auto"  alt="Delete Icon">
       </div>

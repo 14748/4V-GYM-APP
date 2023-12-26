@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiRequestsService, Teacher } from '../api-requests.service';
 
@@ -12,6 +12,7 @@ import { ApiRequestsService, Teacher } from '../api-requests.service';
 export class AddTeacherComponent {
 
   Teacher: Teacher = { id: -1, name: '', email: '', phone: '', photo: '' };
+  @Input() editTeacher: Teacher | null = null;
   @Output() toggleView = new EventEmitter<void>();
 
   constructor(private apiRequestsService: ApiRequestsService) {}
@@ -22,8 +23,31 @@ export class AddTeacherComponent {
       error: (error) => console.error('There was an error creating the teacher', error)
     });
   }
+
+  modifyMonitor(monitorId: number, updatedData: Omit<Teacher, 'id'>) {
+    this.apiRequestsService.updateMonitor(monitorId, updatedData).subscribe({
+      next: () => console.log(`Monitor with ID ${monitorId} updated successfully`),
+      error: (error) => console.error('There was an error updating the monitor', error)
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['editTeacher'] && this.editTeacher) {
+      this.setDefaultValues(this.editTeacher);
+    }
+  }
+
+  setDefaultValues(teacher: Teacher): void{
+    this.Teacher = teacher;
+  }
+
   accept(): void{
-    this.addNewTeacher(this.Teacher);
+    if (this.editTeacher) {
+      this.modifyMonitor(this.editTeacher.id, this.Teacher);
+    }else{
+      this.addNewTeacher(this.Teacher);
+    }
+    
   }
 
   cancel(): void{

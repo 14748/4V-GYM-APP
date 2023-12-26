@@ -101,6 +101,17 @@ export class ApiRequestsService {
     );
   }
 
+  updateMonitor(id: number, monitorData: Omit<Teacher, 'id'>): Observable<any> {
+    const url = `http://127.0.0.1:8000/monitors/${id}`; // Construct the URL with the monitor ID
+    return this.http.put(url, monitorData).pipe(
+      catchError(error => {
+        console.error('Error updating monitor', error);
+        return throwError(() => new Error('Error updating monitor'));
+      })
+    );
+  }
+  
+
   createTeacher(teacherData: Omit<Teacher, 'id'>): Observable<any> {
     const url = 'http://127.0.0.1:8000/monitors'; // Your API endpoint
     return this.http.post(url, teacherData).pipe(

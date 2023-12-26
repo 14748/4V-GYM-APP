@@ -14,8 +14,11 @@ export class TeachersComponent {
   addTeacher: boolean = false;
 
   changeTeacherStatus(): void{
+    this.editTEacher = null;
     this.addTeacher = !this.addTeacher;
   }
+
+  editTEacher: Teacher | null = null;
 
   teachers: Teacher[] = [];
 
@@ -38,6 +41,10 @@ export class TeachersComponent {
     });
   }
   
+  setEditTeacher(teacher: Teacher): void{
+    this.editTEacher = teacher;
+    this.addTeacher = !this.addTeacher;
+  }
 
   shiftTeacherUpwards(): void{
     let nextTeacherIndex: number = this.teachers.indexOf(this.filteredTeachers[this.filteredTeachers.length - 1]) + 1;
