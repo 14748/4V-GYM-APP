@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ApiRequestsService } from '../api-requests.service';
 import { FormatTimePipe } from '../format-time.pipe';
+import { AddActivityComponent } from '../add-activity/add-activity.component';
 
 export interface Monitor {
   id: number;
@@ -23,7 +24,7 @@ export interface Activit1 {
 @Component({
   selector: 'app-activities-display',
   standalone: true,
-  imports: [FormatTimePipe],
+  imports: [FormatTimePipe, AddActivityComponent],
   templateUrl: './activities-display.component.html',
   styleUrl: './activities-display.component.css'
 })
@@ -33,6 +34,12 @@ export interface Activit1 {
 export class ActivitiesDisplayComponent {
   setStartHour(time: number): void{
     this.currentTime = time.toString();
+  }
+
+  addActivity: boolean = false;
+
+  changeActivityStatus(): void{
+    this.addActivity = !this.addActivity;
   }
 
 

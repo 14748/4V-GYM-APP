@@ -1,0 +1,35 @@
+<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/4 z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <div class="flex justify-center mb-6">
+      <img 
+        src="../../assets/img/user-active.svg" 
+        class="h-14 md:h-24 lg:h-32 mr-2" 
+        alt="User Active">
+    </div>
+    <div class="mb-4">
+      <select class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="activityType">
+        <option value="" disabled selected>Select Activity Type</option>
+        @for (item of activityTypes; track $index) {
+          <option value="{{ item.id }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+    
+    <div class="mb-4">
+      <select class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline" id="activityType">
+        <option value="" disabled selected>Select Teacher</option>
+        @for (item of teachers; track $index) {
+          <option value="{{ item.id }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <button (click)="cancel()" class="bg-custom-ring text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+        Cancelar
+      </button>
+      <button (click)="accept()" class="bg-custom-ring text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+        Aceptar
+      </button>
+    </div>
+  </div>
+  
