@@ -90,4 +90,14 @@ export class ApiRequestsService {
       })
     );
   }
+
+  updateActivity(id: number, activityData: Omit<Activit1, 'id'>): Observable<any> {
+    const url = `http://127.0.0.1:8000/activities/${id}`;  // Construct the URL with the activity ID
+    return this.http.put(url, activityData).pipe(
+      catchError(error => {
+        console.error('Error updating activity', error);
+        return throwError(() => new Error('Error updating activity'));
+      })
+    );
+  }
 }

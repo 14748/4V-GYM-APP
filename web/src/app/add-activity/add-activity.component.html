@@ -5,22 +5,37 @@
   
   <div class="mb-4">
     <select [(ngModel)]="newActivity.activity_type" name="activityType" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline">
-      <option value="" disabled selected>Select Activity Type</option>
+      <option value="-1" selected>Select Activity Type</option>
       @for (item of activityTypes; track $index) {
         <option [value]="item.id">{{ item.name }}</option>
       }
     </select>
   </div>
   
-  <!-- in your-component.html -->
-  <div class="mb-4">
-    <select [(ngModel)]="selectedMonitorId" (ngModelChange)="addMonitorToActivity()" name="teacher" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline">
-      <option value="" disabled selected>Select Teacher</option>
-      @for (item of teachers; track $index) {
-        <option [value]="item.id">{{ item.name }}</option>
-      }
-    </select>
-  </div>
+
+  @for (item of newActivity.monitors; track $index) {
+    <div class="mb-4">
+      <select [(ngModel)]="item.id" (ngModelChange)="removeMonitorFromActivity(item.id)" name="teacher" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline">
+        <option value="" selected>Select Teacher</option>
+        @for (item of teachers; track $index) {
+          <option [value]="item.id">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  }
+
+  @if (teachers.length > newActivity.monitors.length) {
+    <div class="mb-4">
+      <select [(ngModel)]="selectedMonitorId" (ngModelChange)="addMonitorToActivity()" name="teacher" class="bg-custom-strong-grey shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline">
+        <option value="-1" selected>Select Teacher</option>
+        @for (item of teachers; track $index) {
+          <option [value]="item.id">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  }
+  
+
 
 
   <div class="flex items-center justify-between">

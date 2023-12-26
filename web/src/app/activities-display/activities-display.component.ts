@@ -40,6 +40,7 @@ export class ActivitiesDisplayComponent {
   startDate: string = "";
   endDate: string = "";
   changeActivityStatus(): void{
+    this.putActivity = null;
     this.addActivity = !this.addActivity;
   }
 
@@ -139,5 +140,13 @@ export class ActivitiesDisplayComponent {
       }
     });
   }
+
+  putActivity: Activit1 | null = null;
+
+  editItem(item: Activit1): void {
+    this.putActivity = item;
+    this.addActivity = !this.addActivity;
+  }
+
 
 }
