@@ -12,25 +12,12 @@ import { ApiRequestsService, Teacher } from '../api-requests.service';
 export class TeachersComponent {
 
   addTeacher: boolean = false;
-
-  changeTeacherStatus(): void{
-    this.editTEacher = null;
-    this.addTeacher = !this.addTeacher;
-  }
-
   editTEacher: Teacher | null = null;
-
   teachers: Teacher[] = [];
+  filteredTeachers: Teacher[] = [];
 
   constructor(private apiRequestsService: ApiRequestsService) {}
 
-  removeMonitor(monitorId: number) {
-    this.apiRequestsService.deleteMonitor(monitorId).subscribe({
-      next: () => console.log(`Monitor with ID ${monitorId} deleted successfully`),
-      error: (error) => console.error('There was an error deleting the monitor', error)
-    });
-  }
-  filteredTeachers: Teacher[] = [];
   ngOnInit() {
     this.apiRequestsService.getMonitors().subscribe({
       next: (data) => {
@@ -40,7 +27,12 @@ export class TeachersComponent {
       error: (error) => console.error('There was an error fetching the monitors', error)
     });
   }
-  
+
+  changeTeacherStatus(): void{
+    this.editTEacher = null;
+    this.addTeacher = !this.addTeacher;
+  }
+
   setEditTeacher(teacher: Teacher): void{
     this.editTEacher = teacher;
     this.addTeacher = !this.addTeacher;
@@ -71,4 +63,13 @@ export class TeachersComponent {
       this.filteredTeachers.unshift(prevTeacher);
     }
   }
+
+  removeMonitor(monitorId: number) {
+    this.apiRequestsService.deleteMonitor(monitorId).subscribe({
+      next: () => console.log(`Monitor with ID ${monitorId} deleted successfully`),
+      error: (error) => console.error('There was an error deleting the monitor', error)
+    });
+  }
+
+ 
 }
