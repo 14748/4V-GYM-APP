@@ -24,7 +24,7 @@ export class ApiRequestsService {
   constructor(private http: HttpClient) { }
 
   getTeachersByApi(): Observable<Teacher[]> {
-    return this.http.get<any[]>('http//127.0.0.1:8000/monitors').pipe(
+    return this.http.get<any[]>('http://127.0.0.1:8000/monitors').pipe(
       map(data => data.map(item => ({
         id: item.id,
         name: item.name,

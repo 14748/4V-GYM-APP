@@ -134,6 +134,7 @@ export class ActivitiesDisplayComponent {
     this.pepitoService.deleteActivity(id).subscribe({
       next: (response) => {
         console.log('Activity deleted successfully:', response);
+        this.pepitoService.notify(null);
       },
       error: (error) => {
         console.error('Error deleting activity:', error);

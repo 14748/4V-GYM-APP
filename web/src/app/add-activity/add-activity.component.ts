@@ -20,6 +20,7 @@ export class AddActivityComponent {
       this.pepitoService.updateActivity(this.putActivity.id, this.newActivity).subscribe({
         next: (response) => {
           console.log('Activity updated successfully:', response);
+          this.pepitoService.notify(null);
         },
         error: (error) => {
           console.error('Error updating activity:', error);
@@ -27,7 +28,7 @@ export class AddActivityComponent {
       });
     }else{
       this.pepitoService.createActivity(this.newActivity).subscribe({
-        next: (response) => console.log('Activity created successfully:', response),
+        next: (response) => {console.log('Activity created successfully:', response), this.pepitoService.notify(null);},
         error: (error) => console.error('Error creating activity:', error)
       });
       console.log(this.newActivity);
