@@ -19,12 +19,16 @@ export class TeachersComponent {
   constructor(private apiRequestsService: ApiRequestsService) {}
 
   ngOnInit() {
-    this.apiRequestsService.getMonitors().subscribe({
-      next: (data) => {
-        this.teachers = data;
-        this.filteredTeachers = this.teachers.slice(0, 3);
-      },
-      error: (error) => console.error('There was an error fetching the monitors', error)
+    this.getTeachers();
+    this.apiRequestsService.obs.subscribe(() => this.getTeachers());
+  }
+
+  getTeachers(): void{
+    this.apiRequestsService.getMonitors()
+    .subscribe((data) =>
+    {
+      this.teachers = data;
+      this.filteredTeachers = this.teachers.slice(0, 3);
     });
   }
 
@@ -66,10 +70,14 @@ export class TeachersComponent {
 
   removeMonitor(monitorId: number) {
     this.apiRequestsService.deleteMonitor(monitorId).subscribe({
-      next: () => console.log(`Monitor with ID ${monitorId} deleted successfully`),
+      next: () => {
+        console.log(`Monitor with ID ${monitorId} deleted successfully`);
+        this.apiRequestsService.notify(null);
+      },
       error: (error) => console.error('There was an error deleting the monitor', error)
     });
   }
+  
 
  
 }

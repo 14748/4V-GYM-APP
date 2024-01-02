@@ -19,17 +19,24 @@ export class AddTeacherComponent {
 
   addNewTeacher(newTeacherData: Omit<Teacher, 'id'>) {
     this.apiRequestsService.createTeacher(newTeacherData).subscribe({
-      next: (response) => console.log('Teacher created successfully!', response),
+      next: (response) => {
+        console.log('Teacher created successfully!', response)
+        this.apiRequestsService.notify(null);
+      } ,
       error: (error) => console.error('There was an error creating the teacher', error)
     });
   }
 
   modifyMonitor(monitorId: number, updatedData: Omit<Teacher, 'id'>) {
     this.apiRequestsService.updateMonitor(monitorId, updatedData).subscribe({
-      next: () => console.log(`Monitor with ID ${monitorId} updated successfully`),
+      next: () => {
+        console.log(`Monitor with ID ${monitorId} updated successfully`);
+        this.apiRequestsService.notify(null);
+      },
       error: (error) => console.error('There was an error updating the monitor', error)
     });
   }
+  
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['editTeacher'] && this.editTeacher) {

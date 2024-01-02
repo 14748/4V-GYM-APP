@@ -24,7 +24,7 @@ export class ApiRequestsService {
   constructor(private http: HttpClient) { }
 
   getTeachersByApi(): Observable<Teacher[]> {
-    return this.http.get<any[]>('//127.0.0.1:8000/monitors').pipe(
+    return this.http.get<any[]>('http//127.0.0.1:8000/monitors').pipe(
       map(data => data.map(item => ({
         id: item.id,
         name: item.name,
@@ -37,6 +37,13 @@ export class ApiRequestsService {
         return throwError(() => new Error('Error fetching teachers'));
       })
     );
+  }
+
+  subject: ReplaySubject<any> = new ReplaySubject();
+  obs: Observable<any> = this.subject.asObservable();
+
+  notify = (data: any) => {
+    this.subject.next(data)
   }
   
 
@@ -71,14 +78,6 @@ export class ApiRequestsService {
 
   createActivity(activityData: Omit<Activit1, 'id'>): Observable<any> {
     return this.http.post('http://127.0.0.1:8000/activities', activityData);
-  }
-  
-
-  subject: ReplaySubject<any> = new ReplaySubject();
-  obs: Observable<any> = this.subject.asObservable();
-
-  notify = (data: any) => {
-    this.subject.next(data)
   }
 
   deleteActivity(id: number): Observable<any> {
