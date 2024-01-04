@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, catchError, map, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Activit1 } from './activities-display/activities-display.component';
 
 export interface ActivityType{
   id: number;
@@ -16,6 +15,15 @@ export interface Teacher{
   phone: string;
   photo: string;
 }
+
+export interface Activity {
+  id: number;
+  activity_type: number;
+  monitors: Teacher[];
+  date_start: string;
+  date_end: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -60,7 +68,7 @@ export class ApiRequestsService {
       })
     );
   }
-  getActivitiesByApi(): Observable<Activit1[]> {
+  getActivitiesByApi(): Observable<Activity[]> {
     return this.http.get<any[]>('http://127.0.0.1:8000/activities').pipe(
       map(data => data.map(item => ({
         id: item.id,
@@ -76,7 +84,7 @@ export class ApiRequestsService {
     );
   }
 
-  createActivity(activityData: Omit<Activit1, 'id'>): Observable<any> {
+  createActivity(activityData: Omit<Activity, 'id'>): Observable<any> {
     return this.http.post('http://127.0.0.1:8000/activities', activityData);
   }
 
@@ -90,7 +98,7 @@ export class ApiRequestsService {
     );
   }
 
-  updateActivity(id: number, activityData: Omit<Activit1, 'id'>): Observable<any> {
+  updateActivity(id: number, activityData: Omit<Activity, 'id'>): Observable<any> {
     const url = `http://127.0.0.1:8000/activities/${id}`;  // Construct the URL with the activity ID
     return this.http.put(url, activityData).pipe(
       catchError(error => {

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { ActivityType, ApiRequestsService, Teacher } from '../api-requests.service';
-import { Activit1, Monitor } from '../activities-display/activities-display.component';
+import { Activity, ActivityType, ApiRequestsService, Teacher } from '../api-requests.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -13,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 export class AddActivityComponent {
   @Input() startDate: string = "";
   @Input() endDate: string = "";
-  @Input() putActivity: Activit1 | null = null;
+  @Input() putActivity: Activity | null = null;
   @Output() toggleView = new EventEmitter<void>();
   accept(): void{
     if (this.putActivity) {
@@ -44,7 +43,7 @@ export class AddActivityComponent {
   public teachers: Teacher[] = [];
   public selectedMonitorId: number = -1;
 
-  newActivity: Omit<Activit1, 'id'>;
+  newActivity: Omit<Activity, 'id'>;
 
   constructor(private pepitoService: ApiRequestsService) {
     this.newActivity = {
@@ -74,7 +73,7 @@ export class AddActivityComponent {
     console.log("Before adding monitor - selectedMonitorId:", this.selectedMonitorId);
 
     if (this.selectedMonitorId && !this.newActivity.monitors.some(m => m.id === this.selectedMonitorId)) {
-      this.newActivity.monitors.push({ id: this.selectedMonitorId } as Monitor);
+      this.newActivity.monitors.push({ id: this.selectedMonitorId } as Teacher);
     }
     setTimeout(() => this.selectedMonitorId = -1);
     console.log("After adding monitor - selectedMonitorId:", this.selectedMonitorId);
@@ -85,7 +84,7 @@ export class AddActivityComponent {
   }
 
 
-  setDefaultValues(activity: Activit1): void {
+  setDefaultValues(activity: Activity): void {
     // Assuming newActivity and selectedMonitorId are already defined in your component
     this.newActivity.activity_type = activity.activity_type;
     this.newActivity.date_start = activity.date_start;
@@ -94,7 +93,7 @@ export class AddActivityComponent {
     // If monitors array is not empty, set the selectedMonitorId to the first monitor's id
     if (activity.monitors && activity.monitors.length > 0) {
        for (let i = 0; i < activity.monitors.length; i++) {
-        this.newActivity.monitors.push({ id: activity.monitors[i].id } as Monitor);
+        this.newActivity.monitors.push({ id: activity.monitors[i].id } as Teacher);
        }
     }
 

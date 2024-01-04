@@ -1,25 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { ApiRequestsService } from '../api-requests.service';
+import { Activity, ApiRequestsService, Teacher } from '../api-requests.service';
 import { FormatTimePipe } from '../format-time.pipe';
 import { AddActivityComponent } from '../add-activity/add-activity.component';
-
-export interface Monitor {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  photo: string;
-}
-
-export interface Activit1 {
-  id: number;
-  activity_type: number;
-  monitors: Monitor[];
-  date_start: string;
-  date_end: string;
-}
-
-
 
 @Component({
   selector: 'app-activities-display',
@@ -44,13 +26,13 @@ export class ActivitiesDisplayComponent {
     this.addActivity = !this.addActivity;
   }
 
-  setDates(act: Activit1 ): void{
+  setDates(act: Activity ): void{
     this.startDate = act.date_start;
     this.endDate = act.date_end;
   }
 
 
-  getActivitiesForToday1(): Activit1[] {
+  getActivitiesForToday1(): Activity[] {
     const requiredTimes = [10, 13, 17];
     const today = this.selectedDate;
   
@@ -73,7 +55,7 @@ export class ActivitiesDisplayComponent {
             const actDate = new Date(act.date_start);
             return actDate.getHours() === hour && actDate.getMinutes() === minutes;
         })) {
-            const placeholderActivity: Activit1 = {
+            const placeholderActivity: Activity = {
                 id: -1, // Placeholder ID
                 activity_type: -1, // Placeholder Activity Type
                 monitors: [], // Placeholder Monitors
@@ -112,7 +94,7 @@ export class ActivitiesDisplayComponent {
   currentTime: string = "";
   @Input() selectedDate: Date = new Date();
 
-  public items: Activit1[] = [];
+  public items: Activity[] = [];
 
   constructor(private pepitoService: ApiRequestsService) {}
 
@@ -142,9 +124,9 @@ export class ActivitiesDisplayComponent {
     });
   }
 
-  putActivity: Activit1 | null = null;
+  putActivity: Activity | null = null;
 
-  editItem(item: Activit1): void {
+  editItem(item: Activity): void {
     this.putActivity = item;
     this.addActivity = !this.addActivity;
   }
