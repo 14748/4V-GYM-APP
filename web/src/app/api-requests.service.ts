@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, catchError, map, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 export interface ActivityType{
   id: number;
@@ -40,9 +40,9 @@ export class ApiRequestsService {
         phone: item.phone,
         photo: item.photo
       }))),
-      catchError(error => {
-        console.error(error);
-        return throwError(() => new Error('Error fetching teachers'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }
@@ -62,9 +62,9 @@ export class ApiRequestsService {
         name: item.name,
         number_monitors: item.number_monitors
       }))),
-      catchError(error => {
-        console.error(error);
-        return throwError(() => new Error('Error fetching activity types'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }
@@ -77,23 +77,28 @@ export class ApiRequestsService {
         date_start: item.date_start,
         date_end: item.date_end
       }))),
-      catchError(error => {
-        console.error(error);
-        return throwError(() => new Error('Error fetching activities'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }
 
   createActivity(activityData: Omit<Activity, 'id'>): Observable<any> {
-    return this.http.post('http://127.0.0.1:8000/activities', activityData);
+    return this.http.post('http://127.0.0.1:8000/activities', activityData).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
+      })
+    );
   }
 
   deleteActivity(id: number): Observable<any> {
     const url = `http://127.0.0.1:8000/activities/${id}`;
     return this.http.delete(url).pipe(
-      catchError(error => {
-        console.error('Error deleting activity', error);
-        return throwError(() => new Error('Error deleting activity'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }
@@ -101,9 +106,9 @@ export class ApiRequestsService {
   updateActivity(id: number, activityData: Omit<Activity, 'id'>): Observable<any> {
     const url = `http://127.0.0.1:8000/activities/${id}`;
     return this.http.put(url, activityData).pipe(
-      catchError(error => {
-        console.error('Error updating activity', error);
-        return throwError(() => new Error('Error updating activity'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }
@@ -111,9 +116,9 @@ export class ApiRequestsService {
   updateMonitor(id: number, monitorData: Omit<Teacher, 'id'>): Observable<any> {
     const url = `http://127.0.0.1:8000/monitors/${id}`;
     return this.http.put(url, monitorData).pipe(
-      catchError(error => {
-        console.error('Error updating monitor', error);
-        return throwError(() => new Error('Error updating monitor'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }
@@ -122,19 +127,20 @@ export class ApiRequestsService {
   createTeacher(teacherData: Omit<Teacher, 'id'>): Observable<any> {
     const url = 'http://127.0.0.1:8000/monitors';
     return this.http.post(url, teacherData).pipe(
-      catchError(error => {
+      catchError((error: HttpErrorResponse) => {
         console.error('Error posting teacher', error);
-        return throwError(() => new Error('Error posting teacher'));
+        return throwError(() => error.error.message);
       })
     );
   }
 
+
   getMonitors(): Observable<Teacher[]> {
     const url = 'http://127.0.0.1:8000/monitors';
     return this.http.get<Teacher[]>(url).pipe(
-      catchError(error => {
-        console.error('Error fetching monitors', error);
-        return throwError(() => new Error('Error fetching monitors'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }
@@ -142,9 +148,9 @@ export class ApiRequestsService {
   deleteMonitor(id: number): Observable<any> {
     const url = `http://127.0.0.1:8000/monitors/${id}`;
     return this.http.delete(url).pipe(
-      catchError(error => {
-        console.error('Error deleting monitor', error);
-        return throwError(() => new Error('Error deleting monitor'));
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error posting teacher', error);
+        return throwError(() => error.error.message);
       })
     );
   }

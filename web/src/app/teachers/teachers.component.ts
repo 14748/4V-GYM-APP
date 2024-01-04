@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AddTeacherComponent } from '../add-teacher/add-teacher.component';
 import { ApiRequestsService, Teacher } from '../api-requests.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-teachers',
@@ -16,7 +17,7 @@ export class TeachersComponent {
   teachers: Teacher[] = [];
   filteredTeachers: Teacher[] = [];
 
-  constructor(private apiRequestsService: ApiRequestsService) {}
+  constructor(private apiRequestsService: ApiRequestsService, private toastr: ToastrService) {}
 
   ngOnInit() {
     this.getTeachers();
@@ -72,10 +73,10 @@ export class TeachersComponent {
   removeMonitor(monitorId: number) {
     this.apiRequestsService.deleteMonitor(monitorId).subscribe({
       next: () => {
-        console.log(`Monitor with ID ${monitorId} deleted successfully`);
+        this.toastr.success('Monitor deleted successfully');
         this.apiRequestsService.notify(null);
       },
-      error: (error) => console.error('There was an error deleting the monitor', error)
+      error: (error) => this.toastr.error(error, 'There was an error deleting the monitor'),
     });
   }
   

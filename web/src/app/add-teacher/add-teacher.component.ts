@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiRequestsService, Teacher } from '../api-requests.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-teacher',
@@ -15,25 +16,29 @@ export class AddTeacherComponent {
   @Input() editTeacher: Teacher | null = null;
   @Output() toggleView = new EventEmitter<void>();
 
-  constructor(private apiRequestsService: ApiRequestsService) {}
+  constructor(private apiRequestsService: ApiRequestsService, private toastr: ToastrService) {}
 
   addNewTeacher(newTeacherData: Omit<Teacher, 'id'>) {
     this.apiRequestsService.createTeacher(newTeacherData).subscribe({
-      next: (response) => {
-        console.log('Teacher created successfully!', response)
+      next: () => {
+        this.toastr.success('Teacher created successfully');
         this.apiRequestsService.notify(null);
+        this.toggleView.emit();
       } ,
-      error: (error) => console.error('There was an error creating the teacher', error)
+      error: (error) => {
+        this.toastr.error(error, 'There was an error creating the teacher')
+      },
     });
   }
 
   modifyMonitor(monitorId: number, updatedData: Omit<Teacher, 'id'>) {
     this.apiRequestsService.updateMonitor(monitorId, updatedData).subscribe({
       next: () => {
-        console.log(`Monitor with ID ${monitorId} updated successfully`);
+        this.toastr.success('Monitor updated successfully');
         this.apiRequestsService.notify(null);
+        this.toggleView.emit();
       },
-      error: (error) => console.error('There was an error updating the monitor', error)
+      error: (error) => this.toastr.error(error, 'There was an error updating the monitor'),
     });
   }
   

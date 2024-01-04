@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Activity, ApiRequestsService, Teacher } from '../api-requests.service';
 import { FormatTimePipe } from '../format-time.pipe';
 import { AddActivityComponent } from '../add-activity/add-activity.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-activities-display',
@@ -92,7 +93,7 @@ export class ActivitiesDisplayComponent {
 
   public items: Activity[] = [];
 
-  constructor(private apiRequestService: ApiRequestsService) {}
+  constructor(private apiRequestService: ApiRequestsService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.getItems();
@@ -110,12 +111,12 @@ export class ActivitiesDisplayComponent {
 
   deleteItem(id: number): void {
     this.apiRequestService.deleteActivity(id).subscribe({
-      next: (response) => {
-        console.log('Activity deleted successfully:', response);
+      next: () => {
+        this.toastr.success('Activity deleted successfully');
         this.apiRequestService.notify(null);
       },
       error: (error) => {
-        console.error('Error deleting activity:', error);
+        this.toastr.error(error, 'There was an error deleting the activity')
       }
     });
   }

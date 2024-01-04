@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { Activity, ActivityType, ApiRequestsService, Teacher } from '../api-requests.service';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-add-activity',
@@ -18,22 +20,24 @@ export class AddActivityComponent {
   accept(): void{
     if (this.putActivity) {
       this.apiRequestService.updateActivity(this.putActivity.id, this.newActivity).subscribe({
-        next: (response) => {
-          console.log('Activity updated successfully:', response);
+        next: () => {
+          this.toastr.success('Activity updated successfully');
           this.apiRequestService.notify(null);
+          this.toggleView.emit();
         },
         error: (error) => {
-          console.error('Error updating activity:', error);
+          this.toastr.error(error, 'There was an error updating the activity')
         }
       });
     }else{
       this.apiRequestService.createActivity(this.newActivity).subscribe({
-        next: (response) => 
+        next: () => 
         {
-          console.log('Activity created successfully:', response), 
+          this.toastr.success('Activity created successfully');
           this.apiRequestService.notify(null);
+          this.toggleView.emit();
         },
-        error: (error) => console.error('Error creating activity:', error)
+        error: (error) => this.toastr.error(error, 'There was an error creating the activity')
       });
       console.log(this.newActivity);
     }
@@ -50,7 +54,7 @@ export class AddActivityComponent {
 
   newActivity: Omit<Activity, 'id'>;
 
-  constructor(private apiRequestService: ApiRequestsService) {
+  constructor(private apiRequestService: ApiRequestsService, private toastr: ToastrService) {
     this.newActivity = {
       activity_type: -1,
       monitors: [],
