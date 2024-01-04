@@ -216,5 +216,3 @@ In the Activities section, you can:
    `cd ./web`
 2. Start the Angular server:  
    `ng s`
-
-Remember to replace the placeholder image paths with the actual paths to your images.
