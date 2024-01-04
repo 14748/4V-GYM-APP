@@ -27,6 +27,7 @@ export class TeachersComponent {
     this.apiRequestsService.getMonitors()
     .subscribe((data) =>
     {
+      console.log(data);
       this.teachers = data;
       this.filteredTeachers = this.teachers.slice(0, 3);
     });
@@ -44,7 +45,7 @@ export class TeachersComponent {
 
   shiftTeacherUpwards(): void{
     let nextTeacherIndex: number = this.teachers.indexOf(this.filteredTeachers[this.filteredTeachers.length - 1]) + 1;
-    if (nextTeacherIndex > this.filteredTeachers.length) {
+    if (nextTeacherIndex >= this.teachers.length) {
       nextTeacherIndex = 0;
     }
     
