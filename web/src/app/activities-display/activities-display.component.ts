@@ -32,7 +32,7 @@ export class ActivitiesDisplayComponent {
   }
 
 
-  getActivitiesForToday1(): Activity[] {
+  getActivitiesForToday(): Activity[] {
     const requiredTimes = [10, 13, 17];
     const today = this.selectedDate;
   
@@ -56,9 +56,9 @@ export class ActivitiesDisplayComponent {
             return actDate.getHours() === hour && actDate.getMinutes() === minutes;
         })) {
             const placeholderActivity: Activity = {
-                id: -1, // Placeholder ID
-                activity_type: -1, // Placeholder Activity Type
-                monitors: [], // Placeholder Monitors
+                id: -1,
+                activity_type: -1,
+                monitors: [],
                 date_start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour, minutes).toISOString(),
                 date_end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour + 1, minutes + 30).toISOString(),
             };
@@ -74,12 +74,8 @@ export class ActivitiesDisplayComponent {
   
     return dayActivities;
   }
-  
 
-
-
-
-  getImagePath(type: Number): string {
+  getImagePath(type: number): string {
     switch(type) {
       case 0:
         return "../../assets/img/pillates.svg";
@@ -96,15 +92,15 @@ export class ActivitiesDisplayComponent {
 
   public items: Activity[] = [];
 
-  constructor(private pepitoService: ApiRequestsService) {}
+  constructor(private apiRequestService: ApiRequestsService) {}
 
   ngOnInit(): void {
     this.getItems();
-    this.pepitoService.obs.subscribe(() => this.getItems());
+    this.apiRequestService.obs.subscribe(() => this.getItems());
   }
 
   getItems(): void {
-    this.pepitoService.getActivitiesByApi()
+    this.apiRequestService.getActivitiesByApi()
     .subscribe((items) => 
     {
       this.items = items;
@@ -113,10 +109,10 @@ export class ActivitiesDisplayComponent {
   }
 
   deleteItem(id: number): void {
-    this.pepitoService.deleteActivity(id).subscribe({
+    this.apiRequestService.deleteActivity(id).subscribe({
       next: (response) => {
         console.log('Activity deleted successfully:', response);
-        this.pepitoService.notify(null);
+        this.apiRequestService.notify(null);
       },
       error: (error) => {
         console.error('Error deleting activity:', error);

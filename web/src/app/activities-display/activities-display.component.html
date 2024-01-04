@@ -2,7 +2,7 @@
     <app-add-activity [startDate]="startDate" [endDate]="endDate" [putActivity]="putActivity"  (toggleView)="changeActivityStatus()"></app-add-activity>
   }
 
-@for (act of getActivitiesForToday1(); track $index) {
+@for (act of getActivitiesForToday(); track $index) {
         <div class="bg-custom-shade-grey px-4 flex flex-col sm:flex-row">
             <div class="flex justify-center items-center p-2 sm:flex-col sm:items-start sm:justify-start mr-2">
                 <p class="sm:mb-2">{{act.date_start | formatTime}}</p>

@@ -14,20 +14,25 @@ export class AddActivityComponent {
   @Input() endDate: string = "";
   @Input() putActivity: Activity | null = null;
   @Output() toggleView = new EventEmitter<void>();
+  
   accept(): void{
     if (this.putActivity) {
-      this.pepitoService.updateActivity(this.putActivity.id, this.newActivity).subscribe({
+      this.apiRequestService.updateActivity(this.putActivity.id, this.newActivity).subscribe({
         next: (response) => {
           console.log('Activity updated successfully:', response);
-          this.pepitoService.notify(null);
+          this.apiRequestService.notify(null);
         },
         error: (error) => {
           console.error('Error updating activity:', error);
         }
       });
     }else{
-      this.pepitoService.createActivity(this.newActivity).subscribe({
-        next: (response) => {console.log('Activity created successfully:', response), this.pepitoService.notify(null);},
+      this.apiRequestService.createActivity(this.newActivity).subscribe({
+        next: (response) => 
+        {
+          console.log('Activity created successfully:', response), 
+          this.apiRequestService.notify(null);
+        },
         error: (error) => console.error('Error creating activity:', error)
       });
       console.log(this.newActivity);
@@ -45,10 +50,10 @@ export class AddActivityComponent {
 
   newActivity: Omit<Activity, 'id'>;
 
-  constructor(private pepitoService: ApiRequestsService) {
+  constructor(private apiRequestService: ApiRequestsService) {
     this.newActivity = {
-      activity_type: -1,  // will be set later
-      monitors: [],  // will be set later
+      activity_type: -1,
+      monitors: [],
       date_start: this.startDate,
       date_end: this.endDate
     };
@@ -85,15 +90,13 @@ export class AddActivityComponent {
 
 
   setDefaultValues(activity: Activity): void {
-    // Assuming newActivity and selectedMonitorId are already defined in your component
     this.newActivity.activity_type = activity.activity_type;
     this.newActivity.date_start = activity.date_start;
     this.newActivity.date_end = activity.date_end;
     
-    // If monitors array is not empty, set the selectedMonitorId to the first monitor's id
     if (activity.monitors && activity.monitors.length > 0) {
-       for (let i = 0; i < activity.monitors.length; i++) {
-        this.newActivity.monitors.push({ id: activity.monitors[i].id } as Teacher);
+       for (const element of activity.monitors) {
+        this.newActivity.monitors.push({ id: element.id } as Teacher);
        }
     }
 
@@ -104,13 +107,13 @@ export class AddActivityComponent {
   ngOnInit(): void {
     this.getActivityTypes();
     this.getTeachers();
-    this.pepitoService.obs.subscribe(() => this.getActivityTypes());
-    this.pepitoService.obs.subscribe(() => this.getTeachers());
+    this.apiRequestService.obs.subscribe(() => this.getActivityTypes());
+    this.apiRequestService.obs.subscribe(() => this.getTeachers());
     console.log(this.selectedMonitorId);
   }
 
   getActivityTypes(): void {
-    this.pepitoService.getActivityTypesByApi()
+    this.apiRequestService.getActivityTypesByApi()
     .subscribe((items) => 
     {
       this.activityTypes = items;
@@ -119,7 +122,7 @@ export class AddActivityComponent {
   }
 
   getTeachers(): void {
-    this.pepitoService.getTeachersByApi()
+    this.apiRequestService.getTeachersByApi()
     .subscribe((items) => 
     {
       this.teachers = items;

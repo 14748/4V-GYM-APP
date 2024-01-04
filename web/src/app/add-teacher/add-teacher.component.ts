@@ -54,7 +54,6 @@ export class AddTeacherComponent {
     }else{
       this.addNewTeacher(this.Teacher);
     }
-    
   }
 
   cancel(): void{

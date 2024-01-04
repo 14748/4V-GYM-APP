@@ -89,7 +89,7 @@ export class ApiRequestsService {
   }
 
   deleteActivity(id: number): Observable<any> {
-    const url = `http://127.0.0.1:8000/activities/${id}`;  // Construct the URL with the activity ID
+    const url = `http://127.0.0.1:8000/activities/${id}`;
     return this.http.delete(url).pipe(
       catchError(error => {
         console.error('Error deleting activity', error);
@@ -99,7 +99,7 @@ export class ApiRequestsService {
   }
 
   updateActivity(id: number, activityData: Omit<Activity, 'id'>): Observable<any> {
-    const url = `http://127.0.0.1:8000/activities/${id}`;  // Construct the URL with the activity ID
+    const url = `http://127.0.0.1:8000/activities/${id}`;
     return this.http.put(url, activityData).pipe(
       catchError(error => {
         console.error('Error updating activity', error);
@@ -109,7 +109,7 @@ export class ApiRequestsService {
   }
 
   updateMonitor(id: number, monitorData: Omit<Teacher, 'id'>): Observable<any> {
-    const url = `http://127.0.0.1:8000/monitors/${id}`; // Construct the URL with the monitor ID
+    const url = `http://127.0.0.1:8000/monitors/${id}`;
     return this.http.put(url, monitorData).pipe(
       catchError(error => {
         console.error('Error updating monitor', error);
@@ -120,7 +120,7 @@ export class ApiRequestsService {
   
 
   createTeacher(teacherData: Omit<Teacher, 'id'>): Observable<any> {
-    const url = 'http://127.0.0.1:8000/monitors'; // Your API endpoint
+    const url = 'http://127.0.0.1:8000/monitors';
     return this.http.post(url, teacherData).pipe(
       catchError(error => {
         console.error('Error posting teacher', error);
@@ -130,7 +130,7 @@ export class ApiRequestsService {
   }
 
   getMonitors(): Observable<Teacher[]> {
-    const url = 'http://127.0.0.1:8000/monitors'; // Your API endpoint
+    const url = 'http://127.0.0.1:8000/monitors';
     return this.http.get<Teacher[]>(url).pipe(
       catchError(error => {
         console.error('Error fetching monitors', error);
@@ -140,7 +140,7 @@ export class ApiRequestsService {
   }
 
   deleteMonitor(id: number): Observable<any> {
-    const url = `http://127.0.0.1:8000/monitors/${id}`; // Construct the URL with the monitor ID
+    const url = `http://127.0.0.1:8000/monitors/${id}`;
     return this.http.delete(url).pipe(
       catchError(error => {
         console.error('Error deleting monitor', error);
