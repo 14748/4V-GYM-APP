@@ -58,66 +58,90 @@ class ActivitiesController extends AbstractController
     }
 
     #[Route('/activities', methods: ['POST'])]
-    public function createActivityWithMonitors(Request $request, EntityManagerInterface $manager): JsonResponse
-    {
-        try {
-            $data = json_decode($request->getContent(), true);
+public function createActivityWithMonitors(Request $request, EntityManagerInterface $manager): JsonResponse
+{
+    try {
+        $data = json_decode($request->getContent(), true);
 
-            if (is_null($data)) {
-                return new JsonResponse([
-                    'cod' => JsonResponse::HTTP_BAD_REQUEST,
-                    'message' => 'Invalid JSON data'
-                ], JsonResponse::HTTP_BAD_REQUEST);
-            }
-
-            if (empty($data['date_start']) || empty($data['date_end']) || empty($data['activity_type']) || empty($data['monitors'])) {
-                return new JsonResponse([
-                    'cod' => JsonResponse::HTTP_BAD_REQUEST,
-                    'message' => 'Missing required fields: date_start, date_end, activity_type, monitors'
-                ], JsonResponse::HTTP_BAD_REQUEST);
-            }
-
-            $activityType = $manager->getRepository(ActivityType::class)->find($data['activity_type']);
-            if (!$activityType) {
-                return new JsonResponse([
-                    'cod' => JsonResponse::HTTP_BAD_REQUEST,
-                    'message' => 'Invalid activity_type ID'
-                ], JsonResponse::HTTP_BAD_REQUEST);
-            }
-
-            $activity = new Activity();
-            
-            $activity->setDatestart($data['date_start']);
-            $activity->setDateend($data['date_end']);
-            $activity->setActivityType($activityType);
-
-            foreach ($data['monitors'] as $monitorData) {
-                $monitor = $manager->getRepository(Monitor::class)->find($monitorData['id']);
-                if ($monitor) {
-                    $activity->addMonitor($monitor); 
-                } else {
-                    return new JsonResponse([
-                        'cod' => JsonResponse::HTTP_BAD_REQUEST,
-                        'message' => "Invalid monitor ID: " . $monitorData['id']
-                    ], JsonResponse::HTTP_BAD_REQUEST);
-                }
-            }
-
-            $manager->persist($activity);
-            $manager->flush();
-
+        if (is_null($data)) {
             return new JsonResponse([
-                'cod' => JsonResponse::HTTP_OK,
-                'message' => 'Activity created successfully',
-                'activityId' => $activity->getId()
-            ], JsonResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            return new JsonResponse([
-                'cod' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                'cod' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => 'Invalid JSON data'
+            ], JsonResponse::HTTP_BAD_REQUEST);
         }
+
+        if (empty($data['date_start']) || empty($data['date_end']) || empty($data['activity_type']) || empty($data['monitors'])) {
+            return new JsonResponse([
+                'cod' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => 'Missing required fields: date_start, date_end, activity_type, monitors'
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $activityType = $manager->getRepository(ActivityType::class)->find($data['activity_type']);
+        if (!$activityType) {
+            return new JsonResponse([
+                'cod' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => 'Invalid activity_type ID'
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $activity = new Activity();
+
+        $dateStart = new \DateTime($data['date_start']);
+        $dateEnd = new \DateTime($data['date_end']);
+
+        $allowedStartTimes = ['09:00', '13:30', '17:30'];
+
+        $startTime = $dateStart->format('H:i');
+
+        if (!in_array($startTime, $allowedStartTimes)) {
+            return new JsonResponse([
+                'cod' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => 'Invalid start time. Activities can only start at 09:00, 13:30, or 17:30'
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $duration = $dateStart->diff($dateEnd)->i + ($dateStart->diff($dateEnd)->h * 60);
+
+        if ($duration !== 90) {
+            return new JsonResponse([
+                'cod' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => 'Invalid duration. Activities must last exactly 90 minutes'
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $activity->setDatestart($data['date_start']);
+        $activity->setDateend($data['date_end']);
+        $activity->setActivityType($activityType);
+
+        foreach ($data['monitors'] as $monitorData) {
+            $monitor = $manager->getRepository(Monitor::class)->find($monitorData['id']);
+            if ($monitor) {
+                $activity->addMonitor($monitor);
+            } else {
+                return new JsonResponse([
+                    'cod' => JsonResponse::HTTP_BAD_REQUEST,
+                    'message' => "Invalid monitor ID: " . $monitorData['id']
+                ], JsonResponse::HTTP_BAD_REQUEST);
+            }
+        }
+
+        $manager->persist($activity);
+        $manager->flush();
+
+        return new JsonResponse([
+            'cod' => JsonResponse::HTTP_OK,
+            'message' => 'Activity created successfully',
+            'activityId' => $activity->getId()
+        ], JsonResponse::HTTP_OK);
+    } catch (\Exception $e) {
+        return new JsonResponse([
+            'cod' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+            'message' => $e->getMessage()
+        ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
+
 
 
     #[Route('/activities/{id}', methods: ['PUT'])]
